@@ -15,6 +15,6 @@ default:
         viewer-requests:
           lambda: spa-spycloud
   functions:
-  - "functions/index.html"
+  - dev-spa-spycloud
   access:
    - 3.121.56.176 # needs to be a whitelisted ip address, so waf needs to be enabled?

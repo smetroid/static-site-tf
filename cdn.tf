@@ -21,7 +21,7 @@ module "cdn" {
   origin = {
     for origin in each.value.origins : "S3-${each.key}" => {
       #domain_name           = origin.domain_name
-      domain_name           = "${each.key}-${env}.s3.${local.region}.amazon.aws.com"
+      domain_name           = "${each.key}-${local.env}.s3.${local.region}.amazon.aws.com"
       s3_origin_config      = lookup(origin, "s3_origin_config", {})
       origin_access_control = "${each.key}-${local.env}"
     }
@@ -39,7 +39,7 @@ module "cdn" {
   }
 
   logging_config = {
-    bucket = module.log_bucket.s3_bucket_bucket_domain_name
+    bucket = "module.log_bucket.${each.key}"
     prefix = "cloudfront"
   }
 
@@ -59,6 +59,13 @@ module "cdn" {
 
     response_headers_policy_id = try(each.value.default_cache_behavior.response_headers_policy_id, aws_cloudfront_response_headers_policy.cdn_acrhp[each.key].id)
   }
+}
+resource "aws_cloudfront_function" "common_cdn_function" {
+  for_each = toset(local.config.functions)
+  name     = each.key
+  runtime  = "cloudfront-js-1.0"
+  code     = file("functions/${each.key}.html")
+  publish  = true
 }
 
 resource "aws_cloudfront_response_headers_policy" "cdn_acrhp" {
