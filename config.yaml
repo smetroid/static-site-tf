@@ -1,0 +1,7 @@
+dev-use1:
+  s3: dev-spa-spycloud
+  #cdn:
+  lambda:
+  - "functions/index.html"
+  access:
+   - 3.121.56.176 # needs to be a whitelisted ip address, so waf needs to be enabled?
