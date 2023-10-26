@@ -64,7 +64,7 @@ module "cdn" {
 resource "aws_cloudfront_response_headers_policy" "cdn_acrhp" {
   for_each = local.config.cdn
   name     = each.key
-  comment  = "${each.key} ${local.env} web checkout specific headers"
+  comment  = "${each.key} ${local.env} spycloud spa specific headers"
 
   security_headers_config {
     strict_transport_security {
