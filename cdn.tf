@@ -1,3 +1,4 @@
+#NOTE: most of the settings are defaults, and I did try to keep the configuration at a minimum
 module "cdn" {
   source   = "terraform-aws-modules/cloudfront/aws"
   version  = "3.2.1"
@@ -26,7 +27,6 @@ module "cdn" {
   }
 
   create_origin_access_control = true
-  # No need to have more than one origin for this example
   origin_access_control = {
     ("${each.key}-${local.env}") = {
       description      = "CloudFront access to S3"
@@ -53,6 +53,6 @@ module "cdn" {
     }
   }
 
-  # This should fix the lambda does not yet exist on a brand new terraform apply
+  # This should fix the lambda does not yet exist on a brand new terraform apply ... need to test
   depends_on = [ aws_cloudfront_function.common_cdn_function ]
 }
