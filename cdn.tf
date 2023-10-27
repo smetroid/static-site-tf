@@ -1,10 +1,9 @@
 module "cdn" {
-  for_each = local.config.cdn
   source   = "terraform-aws-modules/cloudfront/aws"
   version  = "3.2.1"
 
+  for_each = local.config.cdn
   aliases = each.value.aliases
-
   comment             = "${each.key}-${local.env}-CloudFront"
   enabled             = true
   http_version        = "http2and3"
@@ -20,15 +19,14 @@ module "cdn" {
   # Origin key should be the Cloudfront origin name in AWS console
   origin = {
     "S3-${each.key}" = {
-      #domain_name           = origin.domain_name
       domain_name           = "${each.key}-${local.env}.s3.${local.region}.amazonaws.com"
       s3_origin_config      = {}
       origin_access_control = "${each.key}-${local.env}"
     }
   }
 
-  #create_origin_access_control = lookup(each.value, "create_origin_access_control", false)
   create_origin_access_control = true
+  # No need to have more than one origin for this example
   origin_access_control = {
     ("${each.key}-${local.env}") = {
       description      = "CloudFront access to S3"
@@ -50,12 +48,11 @@ module "cdn" {
     function_association = {
       for fk, fv in each.value.function_association : fk => {
         # Issue: the data is looking for a lambda that does not yet exists.
-        #function_arn = data.aws_cloudfront_function.cdn_functions[fv.lambda].arn
         function_arn = aws_cloudfront_function.common_cdn_function[fv.lambda].arn
       }
     }
-
   }
 
-  #depends_on = [ aws_cloudfront_function.common_cdn_function ]
+  # This should fix the lambda does not yet exist on a brand new terraform apply
+  depends_on = [ aws_cloudfront_function.common_cdn_function ]
 }
