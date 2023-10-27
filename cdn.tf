@@ -46,6 +46,7 @@ module "cdn" {
     compress               = true
     query_string           = true
 
+    # This is needed in order to render the app (index.html) when hitting the cloudfront url d66ht9id7skr1.cloudfront.net, instead of d66ht9id7skr1.cloudfront.net/index.html
     function_association = {
       for fk, fv in each.value.function_association : fk => {
         # Issue: the data is looking for a lambda that does not yet exists.
@@ -55,13 +56,6 @@ module "cdn" {
     }
 
   }
-  depends_on = [ aws_cloudfront_function.common_cdn_function ]
-}
-resource "aws_cloudfront_function" "common_cdn_function" {
-  for_each = toset(local.config.functions)
-  name     = each.key
-  runtime  = "cloudfront-js-1.0"
-  code     = file("functions/${each.key}.html")
-  publish  = true
-}
 
+  #depends_on = [ aws_cloudfront_function.common_cdn_function ]
+}

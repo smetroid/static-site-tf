@@ -21,7 +21,7 @@ data "aws_iam_policy_document" "s3_policy" {
   # Origin Access Identities
   statement {
     actions   = ["s3:GetObject"]
-    resources = ["${module.spa_bucket[each.key].s3_bucket_arn}/static/*"]
+    resources = ["${module.spa_bucket[each.key].s3_bucket_arn}/*"]
 
     principals {
       type        = "AWS"
@@ -32,7 +32,7 @@ data "aws_iam_policy_document" "s3_policy" {
   # Origin Access Controls
   statement {
     actions   = ["s3:GetObject"]
-    resources = ["${module.spa_bucket[each.key].s3_bucket_arn}/static/*"]
+    resources = ["${module.spa_bucket[each.key].s3_bucket_arn}/*"]
 
     principals {
       type        = "Service"
