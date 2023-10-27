@@ -1,11 +1,11 @@
 module "cdn" {
+  for_each = local.config.cdn
   source  = "terraform-aws-modules/cloudfront/aws"
   version = "3.2.1"
 
-  for_each = local.config.cdn
   aliases = each.value.aliases
 
-  comment             = "${local.env}-CloudFront"
+  comment             = "${each.key}-${local.env}-CloudFront"
   enabled             = true
   http_version        = "http2and3"
   is_ipv6_enabled     = true
@@ -21,7 +21,7 @@ module "cdn" {
   origin = {
     "S3-${each.key}" = {
       #domain_name           = origin.domain_name
-      domain_name           = "${each.key}-${local.env}.s3.${local.region}.amazon.aws.com"
+      domain_name           = "${each.key}-${local.env}.s3.${local.region}.amazonaws.com"
       s3_origin_config      = {}
       origin_access_control = "${each.key}-${local.env}"
     }
@@ -38,10 +38,10 @@ module "cdn" {
     }
   }
 
-  logging_config = {
-    bucket = "module.log_bucket.${each.key}"
-    prefix = "cloudfront"
-  }
+  #logging_config = {
+  #  bucket = module.log_bucket.each.key
+  #  prefix = "cloudfront"
+  #}
 
   default_cache_behavior = {
     target_origin_id       = "S3-${each.key}"
@@ -59,7 +59,7 @@ module "cdn" {
       }
     }
 
-    response_headers_policy_id = try(each.value.default_cache_behavior.response_headers_policy_id, aws_cloudfront_response_headers_policy.cdn_acrhp[each.key].id)
+    #response_headers_policy_id = try(each.value.default_cache_behavior.response_headers_policy_id, aws_cloudfront_response_headers_policy.cdn_acrhp[each.key].id)
   }
   depends_on = [ aws_cloudfront_function.common_cdn_function ]
 }
@@ -71,42 +71,42 @@ resource "aws_cloudfront_function" "common_cdn_function" {
   publish  = true
 }
 
-resource "aws_cloudfront_response_headers_policy" "cdn_acrhp" {
-  for_each = local.config.cdn
-  name     = each.key
-  comment  = "${each.key} ${local.env} spycloud spa specific headers"
-
-  security_headers_config {
-    strict_transport_security {
-      override                   = true
-      preload                    = true
-      include_subdomains         = true
-      access_control_max_age_sec = 63072000
-    }
-
-    frame_options {
-      frame_option = "SAMEORIGIN"
-      override     = true
-    }
-
-    xss_protection {
-      override   = true
-      protection = true
-      mode_block = true
-    }
-
-    referrer_policy {
-      override        = true
-      referrer_policy = "same-origin"
-    }
-
-    content_security_policy {
-      override                = true
-      content_security_policy = lookup(each.value, "csp", "")
-    }
-
-    content_type_options {
-      override = true
-    }
-  }
-}
+#resource "aws_cloudfront_response_headers_policy" "cdn_acrhp" {
+#  for_each = local.config.cdn
+#  name     = each.key
+#  comment  = "${each.key} ${local.env} spycloud spa specific headers"
+#
+#  security_headers_config {
+#    strict_transport_security {
+#      override                   = true
+#      preload                    = true
+#      include_subdomains         = true
+#      access_control_max_age_sec = 63072000
+#    }
+#
+#    frame_options {
+#      frame_option = "SAMEORIGIN"
+#      override     = true
+#    }
+#
+#    xss_protection {
+#      override   = true
+#      protection = true
+#      mode_block = true
+#    }
+#
+#    referrer_policy {
+#      override        = true
+#      referrer_policy = "same-origin"
+#    }
+#
+#    content_security_policy {
+#      override                = true
+#      content_security_policy = lookup(each.value, "csp", "")
+#    }
+#
+#    content_type_options {
+#      override = true
+#    }
+#  }
+#}

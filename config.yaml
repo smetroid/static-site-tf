@@ -12,7 +12,7 @@ default:
       origins: []
       #  - domain_name: kaia-deeplink-service-msk-eu-dev-226977328153.s3.eu-central-1.amazonaws.com
       function_association:
-        viewer-requests:
+        viewer-request:
           lambda: dev-spa-spycloud
   functions:
   - dev-spa-spycloud
