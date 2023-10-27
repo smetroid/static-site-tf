@@ -7,6 +7,6 @@ resource "aws_cloudfront_function" "common_cdn_function" {
   for_each = toset(local.config.functions)
   name     = each.key
   runtime  = "cloudfront-js-1.0"
-  code     = file("functions/index.js")
+  code     = file("functions/${each.key}.js")
   publish  = true
 }
