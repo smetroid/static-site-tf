@@ -11,11 +11,12 @@ default:
   # This might seem like duplication of code, unfortunately the function/lambda needs to exists before I can associate it with cloudfront
   functions:
   - index
-  access:
-   - 3.121.56.176 # needs to be a whitelisted ip address, so waf needs to be enabled?
+  wafv2:
+    dev-spa-spycloud:
+      white_list:
+      - 3.121.56.176 # needs to be a whitelisted ip address, so waf needs to be enabled?
 
 #TODO:
 # how to 'fix cannot delete function because it's in use????'
 # Workaround: you have to remove the function association, save the changes, and then run terraform apply
 # Add waf
-# Add shell to copy app/index.html to s3 bucket
