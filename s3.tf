@@ -1,6 +1,34 @@
-TODO:
+#############
+# S3 buckets
+#############
 
-# 1. s3 bucket
-# 2. cloudfront resource pointing to the s3 bucket
-# 3. deploy to index.html to s3 bucket 
-# How to make sure the app is only accessed via 3.121.56.176?
+
+module "spa_bucket" {
+  for_each = local.config.cdn
+  source  = "terraform-aws-modules/s3-bucket/aws"
+  version = "~> 3.0"
+
+  bucket        = each.key
+  force_destroy = true
+}
+
+module "log_bucket" {
+  for_each = local.config.cdn
+  source  = "terraform-aws-modules/s3-bucket/aws"
+  version = "~> 3.0"
+
+  bucket = "logs-${each.key}"
+  acl    = null
+  grant = [{
+    type       = "CanonicalUser"
+    permission = "FULL_CONTROL"
+    id         = data.aws_canonical_user_id.current.id
+    }, {
+    type       = "CanonicalUser"
+    permission = "FULL_CONTROL"
+    id         = data.aws_cloudfront_log_delivery_canonical_user_id.cloudfront.id
+    # Ref. https://github.com/terraform-providers/terraform-provider-aws/issues/12512
+    # Ref. https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/AccessLogs.html
+  }]
+  force_destroy = true
+}
