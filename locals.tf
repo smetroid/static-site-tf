@@ -1,6 +1,6 @@
 locals {
   config = yamldecode(file("./config.yaml"))[terraform.workspace]
-  env = terraform.workspace
+  env    = terraform.workspace
   associations = merge([
     for fk, fv in local.config.cdn : {
       for sk, sv in fv.function_association : sv.lambda => fk

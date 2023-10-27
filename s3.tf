@@ -3,8 +3,8 @@
 #############
 module "spa_bucket" {
   for_each = local.config.cdn
-  source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "~> 3.0"
+  source   = "terraform-aws-modules/s3-bucket/aws"
+  version  = "~> 3.0"
 
   bucket        = "${each.key}-${local.env}"
   force_destroy = true
@@ -12,8 +12,8 @@ module "spa_bucket" {
 
 resource "aws_s3_bucket_policy" "bucket_policy" {
   for_each = local.config.cdn
-  bucket = module.spa_bucket[each.key].s3_bucket_id
-  policy = data.aws_iam_policy_document.s3_policy[each.key].json
+  bucket   = module.spa_bucket[each.key].s3_bucket_id
+  policy   = data.aws_iam_policy_document.s3_policy[each.key].json
 }
 
 data "aws_iam_policy_document" "s3_policy" {

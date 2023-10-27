@@ -1,7 +1,7 @@
 module "cdn" {
   for_each = local.config.cdn
-  source  = "terraform-aws-modules/cloudfront/aws"
-  version = "3.2.1"
+  source   = "terraform-aws-modules/cloudfront/aws"
+  version  = "3.2.1"
 
   aliases = each.value.aliases
 
@@ -14,10 +14,10 @@ module "cdn" {
   wait_for_deployment = false
 
   create_monitoring_subscription = true
-  create_origin_access_identity = true
-  origin_access_identities      = lookup(each.value, "origin_access_identities", {})
+  create_origin_access_identity  = true
+  origin_access_identities       = lookup(each.value, "origin_access_identities", {})
 
-# Origin key should be the Cloudfront origin name in AWS console
+  # Origin key should be the Cloudfront origin name in AWS console
   origin = {
     "S3-${each.key}" = {
       #domain_name           = origin.domain_name
