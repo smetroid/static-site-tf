@@ -1,8 +1,6 @@
 #############
 # S3 buckets
 #############
-
-
 module "spa_bucket" {
   for_each = local.config.cdn
   source  = "terraform-aws-modules/s3-bucket/aws"

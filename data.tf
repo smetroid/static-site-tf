@@ -6,8 +6,8 @@ data "aws_cloudfront_cache_policy" "cache_policy" {
   name     = each.value.cache_policy_name
 }
 
-data "aws_cloudfront_function" "cdn_functions" {
-  for_each = local.associations
-  name     = each.key
-  stage    = "LIVE"
-}
+#data "aws_cloudfront_function" "cdn_functions" {
+#  for_each = local.associations
+#  name     = each.key
+#  stage    = "LIVE"
+#}

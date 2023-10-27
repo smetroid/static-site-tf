@@ -19,10 +19,10 @@ module "cdn" {
 
 # Origin key should be the Cloudfront origin name in AWS console
   origin = {
-    for origin in each.value.origins : "S3-${each.key}" => {
+    "S3-${each.key}" = {
       #domain_name           = origin.domain_name
       domain_name           = "${each.key}-${local.env}.s3.${local.region}.amazon.aws.com"
-      s3_origin_config      = lookup(origin, "s3_origin_config", {})
+      s3_origin_config      = {}
       origin_access_control = "${each.key}-${local.env}"
     }
   }
@@ -53,12 +53,15 @@ module "cdn" {
 
     function_association = {
       for fk, fv in each.value.function_association : fk => {
-        function_arn = data.aws_cloudfront_function.cdn_functions[fv.lambda].arn
+        # Issue: the data is looking for a lambda that does not yet exists.
+        #function_arn = data.aws_cloudfront_function.cdn_functions[fv.lambda].arn
+        function_arn = aws_cloudfront_function.common_cdn_function[fv.lambda].arn
       }
     }
 
     response_headers_policy_id = try(each.value.default_cache_behavior.response_headers_policy_id, aws_cloudfront_response_headers_policy.cdn_acrhp[each.key].id)
   }
+  depends_on = [ aws_cloudfront_function.common_cdn_function ]
 }
 resource "aws_cloudfront_function" "common_cdn_function" {
   for_each = toset(local.config.functions)

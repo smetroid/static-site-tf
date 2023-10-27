@@ -13,7 +13,7 @@ default:
       #  - domain_name: kaia-deeplink-service-msk-eu-dev-226977328153.s3.eu-central-1.amazonaws.com
       function_association:
         viewer-requests:
-          lambda: spa-spycloud
+          lambda: dev-spa-spycloud
   functions:
   - dev-spa-spycloud
   access:
