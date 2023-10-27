@@ -49,8 +49,8 @@ data "aws_iam_policy_document" "s3_policy" {
 
 resource "aws_s3_object" "app_data" {
   for_each = local.config.cdn
-  bucket = "${each.key}-${local.env}"
-  key    = "index.html"
-  source = "app/index.html"
-  etag = filemd5("app/index.html")
+  bucket   = "${each.key}-${local.env}"
+  key      = "index.html"
+  source   = "app/index.html"
+  etag     = filemd5("app/index.html")
 }

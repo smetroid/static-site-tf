@@ -14,7 +14,7 @@ default:
   wafv2:
     dev-spa-spycloud:
       white_list:
-      - 3.121.56.176 # needs to be a whitelisted ip address, so waf needs to be enabled?
+      - 3.121.56.176/32 # needs to be a whitelisted ip address, so waf needs to be enabled?
 
 #TODO:
 # how to 'fix cannot delete function because it's in use????'

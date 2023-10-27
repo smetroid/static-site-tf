@@ -1,10 +1,10 @@
 #NOTE: most of the settings are defaults, and I did try to keep the configuration at a minimum
 module "cdn" {
-  source   = "terraform-aws-modules/cloudfront/aws"
-  version  = "3.2.1"
+  source  = "terraform-aws-modules/cloudfront/aws"
+  version = "3.2.1"
 
-  for_each = local.config.cdn
-  aliases = each.value.aliases
+  for_each            = local.config.cdn
+  aliases             = each.value.aliases
   comment             = "${each.key}-${local.env}-CloudFront"
   enabled             = true
   http_version        = "http2and3"
@@ -54,5 +54,5 @@ module "cdn" {
   }
 
   # This should fix the lambda does not yet exist on a brand new terraform apply ... need to test
-  depends_on = [ aws_cloudfront_function.common_cdn_function ]
+  depends_on = [aws_cloudfront_function.common_cdn_function]
 }

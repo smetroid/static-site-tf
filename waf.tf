@@ -2,8 +2,8 @@
 resource "aws_wafv2_ip_set" "white_list" {
   for_each = local.config.wafv2
   #count = local.config["wafv2"] == {} ? 0 : 1
-  name        = "${each.key}-white-list"
-  description = "${each.key} white list"
+  name               = "${each.key}-white-list"
+  description        = "${each.key} white list"
   scope              = "REGIONAL"
   ip_address_version = "IPV4"
 
