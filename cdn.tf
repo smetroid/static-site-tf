@@ -8,10 +8,10 @@ module "cdn" {
   comment             = "${each.key}-${local.env}-CloudFront"
   enabled             = true
   http_version        = "http2and3"
-  is_ipv6_enabled     = true
+  is_ipv6_enabled     = false
   price_class         = "PriceClass_All"
   retain_on_delete    = false
-  wait_for_deployment = false
+  wait_for_deployment = true
 
   create_monitoring_subscription = true
   create_origin_access_identity  = true
@@ -52,6 +52,7 @@ module "cdn" {
       }
     }
   }
+  web_acl_id = module.waf_webaclv2[each.key].web_acl_arn
 
   # This should fix the lambda does not yet exist on a brand new terraform apply ... need to test
   depends_on = [aws_cloudfront_function.common_cdn_function]
