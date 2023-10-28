@@ -41,15 +41,37 @@ module "waf_webaclv2" {
         arn = aws_wafv2_ip_set.white_list[each.key].arn
       }
     },
-    #{
-    #  name     = "${each.key}-${local.region}-${local.env}-block-all"
-    #  priority = "1"
-    #  action   = "block"
-    #  visibility_config = {
-    #    cloudwatch_metrics_enabled = true
-    #    metric_name                = "${each.key}-${local.region}-${local.env}-blocks"
-    #    sampled_requests_enabled   = true
-    #  }
-    #},
+
+    # Rate limiting for security and compliance
+    {
+      name = "RateLimit"
+      priority = 2
+      action = "block"
+      visibility_config = {
+        cloudwatch_metrics_enabled = true
+        metric_name                = "RateLimit"
+        sampled_requests_enabled   = true
+      }
+      rate_based_statement = {
+        limit = 300
+        aggregate_key_type = "IP"
+      }
+    },
+
+    # Adding additional free rule groups
+    {
+      name            = "AWSManagedRulesAmazonIpReputationList"
+      priority        = "1"
+      override_action = "none"
+      visibility_config = {
+        cloudwatch_metrics_enabled = true
+        metric_name                = "AWSManagedRulesAmazonIpReputationList"
+        sampled_requests_enabled   = true
+      }
+      managed_rule_group_statement = {
+        name        = "AWSManagedRulesAmazonIpReputationList"
+        vendor_name = "AWS"
+      }
+    },
   ]
 }
