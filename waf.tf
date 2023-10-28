@@ -75,3 +75,16 @@ module "waf_webaclv2" {
     },
   ]
 }
+
+resource "aws_cloudwatch_log_group" "waf" {
+  for_each = local.config.wafv2
+  # Log group name for WAF ACLs must start with aws-waf-logs-
+  name = "aws-waf-logs-${each.key}"
+  retention_in_days = 14
+}
+
+resource "aws_wafv2_web_acl_logging_configuration" "waf" {
+  for_each = local.config.wafv2
+  resource_arn            = module.waf_webaclv2[each.key].web_acl_arn
+  log_destination_configs = [aws_cloudwatch_log_group.waf[each.key].arn]
+}
