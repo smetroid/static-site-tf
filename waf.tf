@@ -10,7 +10,6 @@ resource "aws_wafv2_ip_set" "white_list" {
   addresses = each.value.white_list
 }
 
-
 module "waf_webaclv2" {
   source  = "umotif-public/waf-webaclv2/aws"
   version = "5.1.2"
@@ -18,7 +17,7 @@ module "waf_webaclv2" {
   for_each               = local.config.wafv2
   name_prefix            = each.key
   description            = "Web ACL for ${each.key} ${local.region} ${local.env}"
-  allow_default_action   = true
+  allow_default_action   = each.value.allow_default_action
   scope                  = "CLOUDFRONT"
   create_alb_association = false
   visibility_config = {
@@ -26,6 +25,7 @@ module "waf_webaclv2" {
     metric_name                = "${each.key}-waf-setup-waf-main-metrics"
     sampled_requests_enabled   = false
   }
+
 
   rules = [
     {

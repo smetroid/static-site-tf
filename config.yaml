@@ -13,9 +13,10 @@ default:
   - index
   wafv2:
     dev-spa-spycloud:
+      allow_default_action: false # if set to false iw till block requests by default
       white_list:
-      - 3.121.56.176/32 # needs to be a whitelisted ip address, so waf needs to be enabled?
-
+      - 3.121.56.176/32 # IP address that needs to be whitelisted as per the instructions
+      - 174.63.31.30/32 # my external IP address
 #TODO:
 # how to 'fix cannot delete function because it's in use????'
 # Workaround: you have to remove the function association, save the changes, and then run terraform apply
