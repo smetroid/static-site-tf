@@ -44,3 +44,60 @@ going into production - then push your changes to the master branch. After you h
 All the best and happy coding,
 
 The SpyCloud Team
+
+---
+
+### Solution
+
+#### Pre-requisites
+
+1. Access to a minimum of set of AWS resources is required, else administrator access to AWS would be ideal.
+2. Terraform state is local state for simplicity.
+3. For this exercise I am exporting the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` for a test account I have on my personal AWS account.  I am sure you all have IAM roles and profiles you assume per your accounts/environments, but wanted to make a note just in case.
+
+eg:
+
+```bash
+export AWS_ACCESS_KEY_ID=""
+export AWS_SECRET_ACCESS_KEY=""
+```
+
+#### Stack
+
+I choose to use cloudfront, an s3 bucket, cloudwatch and WAF as the infrastructure (AWS services) used to deploy the Single Page Application.
+
+#### Why?
+
+1. It's a single page application, there is no need to provision subnets, networks, albs, gateways or routing tables to provide access to the application.
+2. I do believe this is more cost effective, a lot less resources to provision, keeping cost down.
+3. Based on AWS documentation the above resources are a minimum for a single page application.
+4. It seemed easier to write the code to provision the resources and less work :).
+
+### Steps to provision, deploy and destroy the application and aws resources
+
+1. Clone repo
+   1. `git clone`
+2. Initialize terraform resources
+   1. `terraform init`
+3. Provision and deploy the application
+   1. `terraform apply`
+4. Go to the cloudfront url found in the output when terraform apply finishes
+  eg:
+
+  ```bash
+    Apply complete! Resources: 0 added, 1 changed, 0 destroyed.
+
+  Outputs:
+
+  app_url = {
+    "dev-spa-spycloud" = "d3l7fde3o4uchq.cloudfront.net"
+  }
+  ````
+
+#### Steps to destroy the resources and the application
+
+1. terraform destroy
+
+#### Missing steps
+
+1. route53 CNAME record to point to the cloudfront url and ACM certificate.
