@@ -77,20 +77,20 @@ I choose to use cloudfront, an s3 bucket, cloudwatch and WAF as the infrastructu
 
 1. Clone repo
    1. `git clone http://spycloud-pwbcjf@git.codesubmit.io/spycloud/spycloud-devops-challenge-1-qsmutt`
-2. Initialize terraform resources
+2. Download terraform modules and plugins
    1. `terraform init`
 3. Provision and deploy the application
    1. `terraform apply`
-4. Go to the cloudfront url found in the output when terraform apply finishes
+4. Go to the CloudFront URL found in the output when terraform apply finishes
   eg:
 
   ```bash
-    Apply complete! Resources: 0 added, 1 changed, 0 destroyed.
+  Apply complete! Resources: 13 added, 0 changed, 0 destroyed.
 
   Outputs:
 
   app_url = {
-    "dev-spa-spycloud" = "d3l7fde3o4uchq.cloudfront.net"
+    "dev-spa-spycloud" = "d6xtsfw2dnceh.cloudfront.net"
   }
   ````
 
