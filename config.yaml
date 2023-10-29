@@ -18,6 +18,6 @@ default:
   # seperation of resources makes updating and reading easier
   wafv2:
     dev-spa-spycloud:
-      allow_default_action: false # if set to false iw till block requests by default
+      allow_default_action: false # if set to false it will block requests by default
       white_list:
       - 3.121.56.176/32 # IP address that needs to be whitelisted as per the instructions

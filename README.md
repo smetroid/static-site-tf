@@ -76,7 +76,7 @@ I choose to use cloudfront, an s3 bucket, cloudwatch and WAF as the infrastructu
 ### Steps to provision, deploy and destroy the application and aws resources
 
 1. Clone repo
-   1. `git clone`
+   1. `git clone http://spycloud-pwbcjf@git.codesubmit.io/spycloud/spycloud-devops-challenge-1-qsmutt`
 2. Initialize terraform resources
    1. `terraform init`
 3. Provision and deploy the application
@@ -97,7 +97,3 @@ I choose to use cloudfront, an s3 bucket, cloudwatch and WAF as the infrastructu
 #### Steps to destroy the resources and the application
 
 1. terraform destroy
-
-#### Missing steps
-
-1. route53 CNAME record to point to the cloudfront url and ACM certificate.
