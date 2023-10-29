@@ -55,4 +55,5 @@ resource "aws_s3_object" "app_data" {
   etag          = filemd5("app/index.html")
   content_type  = "text/html"
   force_destroy = true
+  depends_on = [ module.spa_bucket ]
 }
