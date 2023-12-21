@@ -1,3 +1,4 @@
+# static-site-tf
 
 #### Pre-requisites
 
@@ -47,4 +48,3 @@ Cloudfront, an s3 bucket, cloudwatch and WAF as the infrastructure (AWS services
 #### Steps to destroy the resources and the application
 
 1. terraform destroy
-# static-site-tf
